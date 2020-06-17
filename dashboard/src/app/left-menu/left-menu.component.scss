@@ -1,0 +1,93 @@
+@import url('https://fonts.googleapis.com/css?family=Pacifico');
+
+.wrap-global-menu{
+  position: fixed;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  background: rgb(35,41,67);
+  padding: 25px 0;
+  width: 70px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  z-index: 200;
+}
+
+.global-menu{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+
+  .active{
+    background: rgb(76, 83, 105);
+  }
+}
+
+.global-menu-e{
+  width: 50px;
+  height: 50px;
+  border-radius: 7px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  margin-bottom: 15px;
+  position: relative;
+  transition: 0.1s;
+  svg {
+    fill: white;
+    width: 50%;
+  }
+
+  &:hover{
+    background: rgb(76, 83, 105);
+  }
+
+  &-help{
+    position: absolute;
+    top: calc(50%);
+    left: calc(100% + 20px);
+    transform: translate(0%, -50%);
+    transition: 0.2s;
+
+    .text-global-menu-e-help{
+      background: black;
+      color: white;
+      font-weight: 600;
+      font-size: 14px;
+      padding: 8px 12px;
+      border-radius: 5px;
+    }
+    .global-menu-e-help-triangle{
+      background: black;
+      width: 10px;
+      height: 10px;
+      position: absolute;
+      top: 50%;
+      left: -2px;
+      transform: rotate(-45deg) translate(0%, -50%);
+    }
+  }
+}
+
+.global-menu-e .global-menu-e-help{
+  display: none;
+}
+.global-menu-e:hover .global-menu-e-help{
+  display: block;
+}
+
+
+.wrap-user-avatar{
+  width: 100%;
+  text-align: center;
+  img{
+    width: 60%;
+    border-radius: 50%;
+    border: 2px solid white;
+  }
+}
+
+/****/
