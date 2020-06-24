@@ -10,6 +10,16 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {MaterialModule} from './material-module';
 import {ReactiveFormsModule} from '@angular/forms';
 import {PortfolioModule} from './portfolio/portfolio.module';
+import { MainComponent } from './main/main.component';
+import {PriceResolver} from './resolvers';
+import { NgxEchartsModule } from 'ngx-echarts';
+
+/**
+ * This will import all modules from echarts.
+ * If you only need custom modules,
+ * please refer to [Custom Build] section.
+ */
+import * as echarts from 'echarts';
 
 @NgModule({
   declarations: [
@@ -17,8 +27,12 @@ import {PortfolioModule} from './portfolio/portfolio.module';
     LeftMenuComponent,
     MainLayoutComponent,
     RightMenuComponent,
+    MainComponent,
   ],
   imports: [
+    NgxEchartsModule.forRoot({
+      echarts,
+    }),
     MaterialModule,
     BrowserModule,
     AppRoutingModule,
@@ -26,7 +40,9 @@ import {PortfolioModule} from './portfolio/portfolio.module';
     ReactiveFormsModule,
     PortfolioModule.forRoot(),
   ],
-  providers: [],
+  providers: [
+    PriceResolver
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule {

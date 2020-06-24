@@ -1,6 +1,7 @@
 import {Component, ModuleWithProviders, OnInit} from '@angular/core';
 import { HttpClient} from '@angular/common/http';
 import {MatDatepickerInputEvent} from '@angular/material/datepicker';
+import { EChartOption } from 'echarts';
 
 import {FormControl} from '@angular/forms';
 import {PortfolioService, Position} from '../portfolio.service';
@@ -21,6 +22,48 @@ export class MainLayoutComponent implements OnInit {
   constructor(private portfolioService: PortfolioService){}
 
   date = new FormControl(new Date(2020, 3, 19));
+
+  get graphData() {
+    console.log(Object.values(this.portfolioService.price.APA));
+    const data = {
+      data: Object.values(this.portfolioService.price.APA).reverse(),
+      days: Object.keys(this.portfolioService.price.APA).reverse(),
+    };
+    return data;
+  }
+  get chartOption(): EChartOption {
+    const data = this.graphData;
+    console.log(data.days[data.days.length - 1]);
+    let min;
+    for (const x of data.days) {
+      if (x.split('-')[0] === '2019') {
+        console.log(x);
+        min = x;
+        break;
+      }
+    }
+    console.log(min);
+    return {
+      xAxis: {
+        type: 'category',
+        data: data.days,
+        min,
+        max: data.days[data.days.length - 1],
+        splitLine: {
+          show: false
+        },
+        boundaryGap: ['0', '100%']
+      },
+      yAxis: {
+        type: 'value',
+      },
+      series: [{
+        type: 'line',
+        data: data.data,
+        areaStyle: {}
+      }]
+    } as EChartOption;
+  }
   displayedColumns = ['ticker', 'cnt', 'cost'];
   portfolio: Position[] = [
     {

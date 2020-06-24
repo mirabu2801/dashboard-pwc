@@ -14,23 +14,19 @@ export interface Position {
 export class PortfolioService {
   private portfolio: Position[] = [];
   private freeMoney = 0;
-  private price;
+  public price;
 
   loadingPriceStocks = false;
 
   constructor(private http: HttpClient) {}
 
   init() {
-    this.readFullPriceStocks();
     this.readFreeMoney();
     this.readPortfolio();
   }
 
   readFullPriceStocks() {
-    this.http.get('assets/data/price.json').subscribe((data) => {
-      this.price = data;
-      this.loadingPriceStocks = true;
-    });
+    return this.http.get('assets/data/price.json');
   }
 
   getFullPriceStocks() {
