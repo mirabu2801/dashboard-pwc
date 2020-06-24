@@ -1,0 +1,135 @@
+<div class="main-page">
+
+  <div class="container">
+    <div class="row">
+      <div class="col-12">
+        <div class="head-main-page">
+          <div class="head-main-page-left"></div>
+          <div class="head-main-page-right">
+            <div class="global-date-pick">
+              <mat-form-field color="accent" [hidden]="true">
+                <mat-label>Inherited calendar color</mat-label>
+                <input matInput [matDatepicker]="picker1" [formControl]="date">
+                <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                <mat-datepicker touchUi #picker1></mat-datepicker>
+              </mat-form-field>
+            </div>
+            <div class="global-date-pick-title">
+              Сегодняшняя дата:
+            </div>
+            <button mat-raised-button (click)="picker1.open()">
+              {{date.value | date}}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="container">
+    <div class="row">
+      <div class="col-12">
+        <div class="main-layout-block">
+          <div class="main-layout-block-title">
+            Рекоммендации на сегодня
+          </div>
+
+          <mat-selection-list #shoes>
+            <mat-list-option *ngFor="let e of rec">
+
+              <div class="rec-block rec-long" *ngIf="e.type == 1">
+                <div class="rec-block-icon">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="27" height="36.82" viewBox="0 0 27 36.82"> <defs> <style> .cls-1 { fill-rule: evenodd; } </style> </defs> <path id="Arrow" class="cls-1" d="M533.12,1609.96l3.9-4.09v23.6a1.491,1.491,0,1,0,2.981,0v-26.46l1.494-1.24,1.508,1.24v26.46a1.512,1.512,0,1,0,3.023,0v-23.6l3.4,3.77a1.483,1.483,0,0,0,2.121.02,1.522,1.522,0,0,0,.019-2.14l-6.5-6.68a1.523,1.523,0,0,0-.61-0.37l-1.9-1.91a1.476,1.476,0,0,0-2.122,0l-1.9,1.91a1.523,1.523,0,0,0-.61.37l-6.5,6.68a1.522,1.522,0,0,0,.019,2.14C532.041,1610.25,532.545,1610.57,533.12,1609.96Zm20.38,21.96h-24a1.515,1.515,0,0,0,0,3.03h24A1.515,1.515,0,0,0,553.5,1631.92Z" transform="translate(-528 -1598.12)"/> </svg>
+                </div>
+
+                <div class="rec-block-text">
+                  <span class="rec-color">
+                    Покупать
+                  </span>
+                  <strong> {{e.cnt}}</strong>
+                  акции компании
+                  <strong>{{e.ticker}}</strong>
+                </div>
+              </div>
+
+              <div class="rec-block rec-sell" *ngIf="e.type == 2">
+                <div class="rec-block-icon">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="38" height="44" viewBox="0 0 38 44"> <defs> <style> .cls-1 { fill-rule: evenodd; } </style> </defs> <path id="Bag_of_money" data-name="Bag of money" class="cls-1" d="M278,2416.81a1.755,1.755,0,0,1-1.247-3,1.8,1.8,0,0,1,2.494,0,1.736,1.736,0,0,1,.516,1.24,1.5,1.5,0,0,0,3,0,4.718,4.718,0,0,0-3.716-4.63l-0.05-.93a1.5,1.5,0,0,0-3,0l0,1.26a4.688,4.688,0,0,0-1.366.93,4.76,4.76,0,0,0,3.371,8.13,2.125,2.125,0,0,1,1.5,3.63,2.178,2.178,0,0,1-1.01.55c-0.315,0-.631.01-0.947,0.01a2.094,2.094,0,0,1-1.662-2.28,1.5,1.5,0,0,0-1.345-1.64,1.482,1.482,0,0,0-1.644,1.34,5.087,5.087,0,0,0,3.117,5.23,1.494,1.494,0,0,0,2.907.32A5.121,5.121,0,0,0,278,2416.81Zm19,9.19c-0.4-4.49-2.522-18.47-11.206-23.89,0.008-.02.019-0.04,0.026-0.06l3-8a3,3,0,0,0-2.812-4.05H269.99a3,3,0,0,0-2.813,4.05l3,8c0.007,0.02.018,0.04,0.026,0.06-8.686,5.42-10.809,19.4-11.207,23.89a8.825,8.825,0,0,0,2,6,6.745,6.745,0,0,0,5.16,2h23.679a6.748,6.748,0,0,0,5.161-2A8.825,8.825,0,0,0,297,2426Zm-27.01-33h16.022l-3,8H272.994Zm19.849,38H266.16c-2.33,0-4.366-1.68-4.16-4,0.739-8.33,3.937-19.76,10.994-23h10.012c7.057,3.24,10.255,14.67,10.994,23C294.205,2429.32,292.169,2431,289.839,2431Z" transform="translate(-259 -2390)"/></svg>
+                </div>
+
+                <div class="rec-block-text">
+                  <span class="rec-color">
+                    Продавать
+                  </span>
+                  <strong> {{e.cnt}}</strong>
+                  акции компании
+                  <strong>{{e.ticker}}</strong>
+
+                </div>
+              </div>
+
+              <div class="rec-block rec-short" *ngIf="e.type == 3">
+                <div class="rec-block-icon">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="27" height="37.03" viewBox="0 0 27 37.03"> <defs> <style> .cls-1 { fill-rule: evenodd; } </style> </defs> <path id="Arrow" class="cls-1" d="M637.88,1623.1l-3.9,4.12V1603.5a1.491,1.491,0,1,0-2.981,0v26.59l-1.494,1.25-1.508-1.25V1603.5a1.512,1.512,0,1,0-3.024,0v23.72l-3.4-3.8a1.483,1.483,0,0,0-2.121-.02,1.535,1.535,0,0,0-.019,2.15l6.5,6.72a1.419,1.419,0,0,0,.61.37l1.9,1.93a1.493,1.493,0,0,0,2.122,0l1.9-1.93a1.419,1.419,0,0,0,.61-0.37l6.5-6.72a1.535,1.535,0,0,0-.019-2.15C638.959,1622.81,638.455,1622.49,637.88,1623.1Zm-20.38-22.07h24a1.52,1.52,0,0,0,0-3.04h-24A1.52,1.52,0,0,0,617.5,1601.03Z" transform="translate(-616 -1598)"/></svg>
+                </div>
+
+                <div class="rec-block-text">
+                  <span class="rec-color">
+                    Шортим
+                  </span>
+                  <strong> {{e.cnt}}</strong>
+                  акции компании
+                  <strong>{{e.ticker}}</strong>
+                </div>
+              </div>
+
+            </mat-list-option>
+          </mat-selection-list>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="row">
+      <div class="col-6">
+        <div class="main-layout-block">
+          <div class="main-layout-block-title">
+            Мой портфель
+          </div>
+
+          <div class="example-container mat-elevation-z0">
+            <table mat-table [dataSource]="portfolio">
+              <!-- Position Column -->
+              <ng-container matColumnDef="ticker" sticky>
+                <th mat-header-cell *matHeaderCellDef> Тикер </th>
+                <td mat-cell *matCellDef="let element"> {{element.ticker}} </td>
+              </ng-container>
+
+              <!-- Name Column -->
+              <ng-container matColumnDef="cnt">
+                <th mat-header-cell *matHeaderCellDef> Кол-во </th>
+                <td mat-cell *matCellDef="let element"> {{element.cnt}} </td>
+              </ng-container>
+
+              <ng-container matColumnDef="cost">
+                <th mat-header-cell *matHeaderCellDef> Стоимость </th>
+                <td mat-cell *matCellDef="let element"> {{element.cnt}} </td>
+              </ng-container>
+
+              <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            </table>
+          </div>
+
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
