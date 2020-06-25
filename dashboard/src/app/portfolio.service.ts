@@ -6,6 +6,15 @@ import {AppModule} from './app.module';
 export interface Position {
   ticker: string;
   cnt: number;
+  closeDate?: string;
+}
+
+export interface Recommendation {
+  type: number;
+  ticker: string;
+  cnt: number;
+  confidence?: number;
+  closeDate?: string;
 }
 
 @Injectable({
@@ -25,15 +34,11 @@ export class PortfolioService {
     this.readPortfolio();
   }
 
-  readFullPriceStocks() {
-    return this.http.get('assets/data/price.json');
+  getRecommendationsForDate(date: string): Recommendation[]{
+    return [];
   }
 
-  getFullPriceStocks() {
-    return this.price;
-  }
-
-  getCostStock(ticker: string, date: Date) {
+  dateToString(date: Date): string{
     let key: string = date.getFullYear() + '-';
 
     if (date.getMonth() < 10) {
@@ -47,7 +52,19 @@ export class PortfolioService {
     } else {
       key += date.getDate();
     }
-    console.log(key);
+    return key;
+  }
+
+  readFullPriceStocks() {
+    return this.http.get('assets/data/price.json');
+  }
+
+  getFullPriceStocks() {
+    return this.price;
+  }
+
+  getCostStock(ticker: string, date: Date) {
+    const key: string = this.dateToString(date);
     return this.price[ticker][key];
   }
 
@@ -113,7 +130,9 @@ export class PortfolioService {
         return;
       }
     }
-    this.portfolio.push({ticker, cnt});
+
+    const tempDate = '2020-03-19';
+    this.portfolio.push({ticker, cnt, closeDate: tempDate});
     this.setPortfolio();
     return;
   }

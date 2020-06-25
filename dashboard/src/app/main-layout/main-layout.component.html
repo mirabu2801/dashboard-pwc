@@ -35,9 +35,8 @@
             Рекоммендации на сегодня
           </div>
 
-          <mat-selection-list #shoes>
-            <mat-list-option *ngFor="let e of rec">
-
+          <mat-selection-list (selectionChange)="onChanged($event)" #shoes>
+            <mat-list-option *ngFor="let e of rec; let i = index" [value]="i">
               <div class="rec-block rec-long" *ngIf="e.type == 1">
                 <div class="rec-block-icon">
                   <svg xmlns="http://www.w3.org/2000/svg" width="27" height="36.82" viewBox="0 0 27 36.82"> <defs> <style> .cls-1 { fill-rule: evenodd; } </style> </defs> <path id="Arrow" class="cls-1" d="M533.12,1609.96l3.9-4.09v23.6a1.491,1.491,0,1,0,2.981,0v-26.46l1.494-1.24,1.508,1.24v26.46a1.512,1.512,0,1,0,3.023,0v-23.6l3.4,3.77a1.483,1.483,0,0,0,2.121.02,1.522,1.522,0,0,0,.019-2.14l-6.5-6.68a1.523,1.523,0,0,0-.61-0.37l-1.9-1.91a1.476,1.476,0,0,0-2.122,0l-1.9,1.91a1.523,1.523,0,0,0-.61.37l-6.5,6.68a1.522,1.522,0,0,0,.019,2.14C532.041,1610.25,532.545,1610.57,533.12,1609.96Zm20.38,21.96h-24a1.515,1.515,0,0,0,0,3.03h24A1.515,1.515,0,0,0,553.5,1631.92Z" transform="translate(-528 -1598.12)"/> </svg>
@@ -87,11 +86,70 @@
             </mat-list-option>
           </mat-selection-list>
 
+          <div class="main-layout-block-footer">
+            <div class="left"></div>
+            <div class="right">
+
+<!--              <button (click)="makingRecommendations()" mat-raised-button color="accent">создать рек</button>-->
+
+              <button (click)="applySelectedRecommendations()" *ngIf="shoes.selectedOptions.selected.length != 0" mat-raised-button color="accent">Применить</button>
+              <button *ngIf="shoes.selectedOptions.selected.length == 0" mat-raised-button color="accent" disabled>Применить</button>
+
+            </div>
+          </div>
         </div>
       </div>
 
     </div>
   </div>
+
+  <div class="container">
+    <div class="row">
+      <div class="col-12">
+        <div class="main-layout-block">
+          <div class="main-layout-block-title">
+            Настройки
+          </div>
+
+          <div class="settings-rec">
+            <div class="col-4">
+              <div class="settings-rec-block">
+                <div class="settings-rec-block-title">
+                  Уровень риска
+                </div>
+
+                <mat-radio-group class="example-radio-group" aria-label="Select an option">
+                  <mat-radio-button class="example-radio-button" value="1">Низкий</mat-radio-button>
+                  <mat-radio-button class="example-radio-button" value="3">Умеренный</mat-radio-button>
+                </mat-radio-group>
+
+              </div>
+            </div>
+            <div class="col-4">
+              <div class="settings-rec-block">
+                <div class="settings-rec-block-title">
+                  Период предсказания
+                </div>
+
+                <mat-radio-group class="example-radio-group" aria-label="Select an option">
+                  <mat-radio-button class="example-radio-button" value="2">15 дней</mat-radio-button>
+                  <mat-radio-button class="example-radio-button" value="3">30 дней</mat-radio-button>
+                </mat-radio-group>
+
+              </div>
+            </div>
+          </div>
+
+
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+
+
 
   <div class="container">
     <div class="row">
@@ -129,7 +187,20 @@
         </div>
       </div>
 
+      <div class="col-6">
+        <div class="main-layout-block">
+          <div class="main-layout-block-title">
+            График
+          </div>
+
+          <div echarts [options]="chartOption" class="demo-chart"></div>
+        </div>
+
+      </div>
+
     </div>
   </div>
 </div>
-<div echarts [options]="chartOption" class="demo-chart"></div>
+
+
+

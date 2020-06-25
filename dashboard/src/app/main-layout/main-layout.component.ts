@@ -1,17 +1,12 @@
-import {Component, ModuleWithProviders, OnInit} from '@angular/core';
+import {Component, ModuleWithProviders, OnInit, ViewChild} from '@angular/core';
 import { HttpClient} from '@angular/common/http';
 import {MatDatepickerInputEvent} from '@angular/material/datepicker';
 import { EChartOption } from 'echarts';
 
 import {FormControl} from '@angular/forms';
-import {PortfolioService, Position} from '../portfolio.service';
+import {PortfolioService, Position, Recommendation} from '../portfolio.service';
 import {AppModule} from '../app.module';
 
-export interface Recommendation {
-  type: number;
-  ticker: string;
-  cnt: number;
-}
 
 @Component({
   selector: 'app-main-layout',
@@ -24,7 +19,7 @@ export class MainLayoutComponent implements OnInit {
   date = new FormControl(new Date(2020, 3, 19));
 
   get graphData() {
-    console.log(Object.values(this.portfolioService.price.APA));
+    //console.log(Object.values(this.portfolioService.price.APA));
     const data = {
       data: Object.values(this.portfolioService.price.APA).reverse(),
       days: Object.keys(this.portfolioService.price.APA).reverse(),
@@ -33,11 +28,11 @@ export class MainLayoutComponent implements OnInit {
   }
   get chartOption(): EChartOption {
     const data = this.graphData;
-    console.log(data.days[data.days.length - 1]);
+    //console.log(data.days[data.days.length - 1]);
     let min;
     for (const x of data.days) {
       if (x.split('-')[0] === '2019') {
-        console.log(x);
+        //console.log(x);
         min = x;
         break;
       }
@@ -68,27 +63,77 @@ export class MainLayoutComponent implements OnInit {
   portfolio: Position[] = [
     {
       ticker: 'Загрузка...',
-      cnt: 0
+      cnt: 0,
+      closeDate: '123'
     },
   ];
 
   rec: Recommendation[] = [
-    {
-      type: 1,
-      ticker: 'APL',
-      cnt: 345
-    },
-    {
-      type: 3,
-      ticker: 'TTM',
-      cnt: 234
-    },
-    {
-      type: 2,
-      ticker: 'FCB',
-      cnt: 123
+     {
+       type: 1,
+       ticker: 'APL',
+       cnt: 345
+     },
+     {
+       type: 3,
+       ticker: 'TTM',
+       cnt: 234
+     },
+     {
+       type: 2,
+       ticker: 'FCB',
+       cnt: 123
     },
   ];
+
+  makingRecommendations() {
+    this.rec = [];
+
+    const myPortfolio = this.portfolioService.getPortfolio();
+    console.log(myPortfolio);
+
+    const todayStr = this.portfolioService.dateToString(this.date.value);
+    console.log(todayStr);
+
+    for (const elem of myPortfolio) {
+      //if (elem.closeDate === todayStr) {
+      if (1) {
+        this.rec.push({
+          type: 2,
+          ticker: elem.ticker,
+          cnt: elem.cnt,
+        });
+      }
+    }
+
+    const recDate = this.portfolioService.getRecommendationsForDate(todayStr);
+
+    for (const elem of recDate) {
+      const type = elem.type === 1 ? 1 : 3;
+
+      let cnt = this.portfolioService.getBalance();
+      cnt = cnt * elem.cnt / this.portfolioService.getCostStock(elem.ticker, this.date.value);
+
+      this.rec.push({
+        type,
+        ticker: elem.ticker,
+        cnt,
+        confidence: elem.confidence
+      });
+    }
+    return;
+  }
+
+  @ViewChild('shoes') checkRecommendList;
+
+  applySelectedRecommendations() {
+    console.log(this.checkRecommendList);
+  }
+
+  onChanged(increased: any){
+    //console.log(increased);
+    console.log(this.checkRecommendList);
+  }
 
   convertCnt(ticker: string, cnt: number): number {
     const dd = new Date(this.date.value);
@@ -97,12 +142,12 @@ export class MainLayoutComponent implements OnInit {
 
   ngOnInit(){
     this.portfolioService.init();
-    setTimeout(() => {
+    this.portfolio = this.portfolioService.getPortfolio();
+    /*setTimeout(() => {
       const dd = new Date(2020, 3, 19);
       const arr = this.portfolioService.getCostStock('APA', dd);
 
-      this.portfolio = this.portfolioService.getPortfolio();
       console.log(this.portfolioService.getPortfolio());
-    }, 10000);
+    }, 10000);*/
   }
 }
