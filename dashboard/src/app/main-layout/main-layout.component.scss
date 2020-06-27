@@ -41,6 +41,14 @@
     display: flex;
     align-items: center;
   }
+
+  &-left{
+    display: flex;
+    align-items: center;
+    button{
+      margin-right: 10px;
+    }
+  }
 }
 
 .global-date-pick-title{

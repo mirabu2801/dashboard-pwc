@@ -35,17 +35,43 @@ export class PortfolioService {
     this.readPortfolio();
   }
 
+  destroyFreeMoney() {
+    this.freeMoney = 0;
+    this.setFreeMoney();
+  }
+
   getRecommendationsForDate(date: string): Recommendation[]{
     console.log(this.predicts);
 
-    return [
-      {
-        type: 1,
-        ticker: 'APA',
-        cnt: 1,
-        closeDate: '2020-03-19'
+    const risk = 'high';
+    const interval = 30;
+    const dateStr  = date;
+
+    const data = this.predicts[risk][interval][dateStr];
+    console.log(data);
+
+    if (!data) {
+      return [];
+    }
+
+    const rec: Recommendation[] = [];
+
+    for (const e of data) {
+      let type, ticker, cnt, confidence, closeDate;
+
+      if (e[0] === 'BUY') {
+        type = 1;
       }
-    ];
+
+      ticker = e[1];
+      confidence = e[2];
+      cnt = e[3] * 1 / 30;
+      closeDate = e[5];
+
+      rec.push({type, ticker, cnt, confidence, closeDate});
+    }
+
+    return rec;
   }
 
   dateToString(date: Date): string{
@@ -132,6 +158,20 @@ export class PortfolioService {
   getPortfolio(): Position[] {
     this.readPortfolio();
     return this.portfolio;
+  }
+
+  sellAllPortfolio(date: Date) {
+    for (let i = 0; i < this.portfolio.length; i++) {
+      const elem = this.portfolio[i];
+      this.addFreeMoney(elem.cnt * this.getCostStock(elem.ticker, date));
+    }
+
+    while (this.portfolio.length > 0) {
+      this.portfolio.splice(0, 1);
+      this.setPortfolio();
+    }
+
+    return;
   }
 
   applyRecommendationToPortfolio(rec: Recommendation, date: Date) {

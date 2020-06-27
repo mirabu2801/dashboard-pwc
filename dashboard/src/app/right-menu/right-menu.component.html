@@ -22,7 +22,7 @@
           Баланс
         </div>
         <div class="balance-num">
-          {{portfolioService.getFreeMoney()}}$
+          {{portfolioService.getFreeMoney() | number:'.0-0'}}$
         </div>
       </div>
     </div>

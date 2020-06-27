@@ -1,15 +1,25 @@
 <div class="main-page">
-
   <div class="container">
     <div class="row">
       <div class="col-12">
         <div class="head-main-page">
-          <div class="head-main-page-left"></div>
+          <div class="head-main-page-left">
+            <!--<div class="global-date-pick-title">
+              Эмулировать работу вперед на:
+            </div>
+            <button mat-raised-button (click)="emulation(10)">
+              10 дней
+            </button>
+            <button mat-raised-button (click)="emulation(30)">
+              30 дней
+            </button>-->
+
+          </div>
           <div class="head-main-page-right">
             <div class="global-date-pick">
               <mat-form-field color="accent" [hidden]="true">
                 <mat-label>Inherited calendar color</mat-label>
-                <input matInput [matDatepicker]="picker1" [formControl]="date">
+                <input (dateChange)="changeDate()" matInput [matDatepicker]="picker1" [formControl]="date">
                 <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
                 <mat-datepicker touchUi #picker1></mat-datepicker>
               </mat-form-field>
@@ -32,7 +42,7 @@
       <div class="col-12">
         <div class="main-layout-block">
           <div class="main-layout-block-title">
-            Рекоммендации на сегодня
+            Рекоммендации на сегодня {{date.value | date}}
           </div>
 
           <mat-selection-list (selectionChange)="onChanged($event)" #shoes>
@@ -90,6 +100,8 @@
             <div class="left"></div>
             <div class="right">
 
+              <button (click)="destroyP()" mat-raised-button color="accent">все продать</button>
+
               <button (click)="makingRecommendations()" mat-raised-button color="accent">создать рек</button>
 
               <button (click)="applySelectedRecommendations()" *ngIf="shoes.selectedOptions.selected.length != 0" mat-raised-button color="accent">Применить</button>
@@ -119,8 +131,8 @@
                 </div>
 
                 <mat-radio-group class="example-radio-group" aria-label="Select an option">
-                  <mat-radio-button class="example-radio-button" value="1">Низкий</mat-radio-button>
-                  <mat-radio-button class="example-radio-button" value="3">Умеренный</mat-radio-button>
+                  <mat-radio-button disabled class="example-radio-button" value="1">Низкий</mat-radio-button>
+                  <mat-radio-button checked class="example-radio-button" value="2">Умеренный</mat-radio-button>
                 </mat-radio-group>
 
               </div>
@@ -132,11 +144,19 @@
                 </div>
 
                 <mat-radio-group class="example-radio-group" aria-label="Select an option">
-                  <mat-radio-button class="example-radio-button" value="2">15 дней</mat-radio-button>
-                  <mat-radio-button class="example-radio-button" value="3">30 дней</mat-radio-button>
+                  <mat-radio-button class="example-radio-button" value="3">15 дней</mat-radio-button>
+                  <mat-radio-button disabled class="example-radio-button" value="4">30 дней</mat-radio-button>
                 </mat-radio-group>
 
               </div>
+            </div>
+          </div>
+
+          <div class="main-layout-block-footer">
+            <div class="left"></div>
+            <div class="right">
+              <button (click)="makingRecommendations()" disabled mat-raised-button color="accent">Применить</button>
+
             </div>
           </div>
 

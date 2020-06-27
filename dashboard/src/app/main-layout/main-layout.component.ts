@@ -16,7 +16,19 @@ import {AppModule} from '../app.module';
 export class MainLayoutComponent implements OnInit {
   constructor(public portfolioService: PortfolioService){}
 
-  date = new FormControl(new Date(2020, 3, 19));
+  date = new FormControl(new Date(2010, 1, 4));
+
+  changeDate() {
+    this.buildPage();
+    console.log(this.date);
+  }
+
+  destroyP() {
+    this.portfolioService.sellAllPortfolio(this.date.value);
+    //this.portfolioService.destroyFreeMoney();
+    this.portfolio = this.portfolioService.getPortfolio();
+    this.makingRecommendations();
+  }
 
   get graphData() {
     //console.log(Object.values(this.portfolioService.price.APA));
@@ -112,30 +124,33 @@ export class MainLayoutComponent implements OnInit {
 
       let cnt = this.portfolioService.getBalance(this.date.value);
       console.log("Баланс :", cnt);
-      cnt = cnt * elem.cnt / this.portfolioService.getCostStock(elem.ticker, this.date.value);
 
-      let ok = 1;
+      if (this.portfolioService.getCostStock(elem.ticker, this.date.value)) {
+        cnt = cnt * elem.cnt / this.portfolioService.getCostStock(elem.ticker, this.date.value);
 
-      for (const myPos of this.portfolio) {
-        console.log(elem, myPos);
-        if (myPos.ticker === elem.ticker &&
-        myPos.closeDate === elem.closeDate) {
-          ok = 0;
-          break;
+        let ok = 1;
+
+        for (const myPos of this.portfolio) {
+          console.log(elem, myPos);
+          if (myPos.ticker === elem.ticker &&
+            myPos.closeDate === elem.closeDate) {
+            ok = 0;
+            break;
+          }
         }
-      }
 
-      if (!ok) {
-        continue;
-      }
+        if (!ok) {
+          continue;
+        }
 
-      this.rec.push({
-        type,
-        ticker: elem.ticker,
-        cnt,
-        confidence: elem.confidence,
-        closeDate: elem.closeDate
-      });
+        this.rec.push({
+          type,
+          ticker: elem.ticker,
+          cnt,
+          confidence: elem.confidence,
+          closeDate: elem.closeDate
+        });
+      }
     }
     return;
   }
@@ -162,14 +177,26 @@ export class MainLayoutComponent implements OnInit {
     return this.portfolioService.getCostStock(ticker, dd);
   }
 
-  ngOnInit(){
+  buildPage() {
     this.portfolioService.init();
     this.portfolio = this.portfolioService.getPortfolio();
-    /*setTimeout(() => {
-      const dd = new Date(2020, 3, 19);
-      const arr = this.portfolioService.getCostStock('APA', dd);
+    this.makingRecommendations();
+  }
 
-      console.log(this.portfolioService.getPortfolio());
-    }, 10000);*/
+  emulation(count: number) {
+    console.log(count);
+    for (let i = 0; i < count; i++) {
+      console.log(i);
+      let tmpDate: Date = this.date.value;
+      console.log(tmpDate);
+      tmpDate.setDate(tmpDate.getDate() + 1);
+      this.date.setValue(tmpDate);
+    }
+    console.log(this.date);
+    this.date.updateValueAndValidity();
+  }
+
+  ngOnInit(){
+    this.buildPage();
   }
 }
