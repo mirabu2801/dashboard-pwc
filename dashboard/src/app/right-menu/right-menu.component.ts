@@ -8,7 +8,7 @@ import {PortfolioService} from '../portfolio.service';
 })
 export class RightMenuComponent implements OnInit {
 
-  constructor(private portfolioService: PortfolioService) { }
+  constructor(public portfolioService: PortfolioService) { }
 
   balance = 0;
 

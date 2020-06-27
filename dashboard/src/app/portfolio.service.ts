@@ -18,12 +18,13 @@ export interface Recommendation {
 }
 
 @Injectable({
-  providedIn: root
+  providedIn: 'root'
 })
 export class PortfolioService {
   private portfolio: Position[] = [];
   private freeMoney = 0;
   public price;
+  public predicts;
 
   loadingPriceStocks = false;
 
@@ -35,6 +36,8 @@ export class PortfolioService {
   }
 
   getRecommendationsForDate(date: string): Recommendation[]{
+    console.log(this.predicts);
+
     return [
       {
         type: 1,
@@ -64,6 +67,10 @@ export class PortfolioService {
 
   readFullPriceStocks() {
     return this.http.get('assets/data/price.json');
+  }
+
+  readFullPredicts() {
+    return this.http.get('assets/data/predicts.json');
   }
 
   getFullPriceStocks() {

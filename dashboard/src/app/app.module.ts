@@ -11,7 +11,7 @@ import {MaterialModule} from './material-module';
 import {ReactiveFormsModule} from '@angular/forms';
 import {PortfolioModule} from './portfolio/portfolio.module';
 import { MainComponent } from './main/main.component';
-import {PriceResolver} from './resolvers';
+import {PredictResolver, PriceResolver} from './resolvers';
 import { NgxEchartsModule } from 'ngx-echarts';
 
 /**
@@ -41,7 +41,8 @@ import * as echarts from 'echarts';
     PortfolioModule.forRoot(),
   ],
   providers: [
-    PriceResolver
+    PriceResolver,
+    PredictResolver
   ],
   bootstrap: [AppComponent]
 })

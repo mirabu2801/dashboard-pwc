@@ -14,7 +14,7 @@ import {AppModule} from '../app.module';
   styleUrls: ['./main-layout.component.scss'],
 })
 export class MainLayoutComponent implements OnInit {
-  constructor(private portfolioService: PortfolioService){}
+  constructor(public portfolioService: PortfolioService){}
 
   date = new FormControl(new Date(2020, 3, 19));
 

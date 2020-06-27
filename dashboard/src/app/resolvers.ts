@@ -19,3 +19,19 @@ export class PriceResolver implements Resolve<any> {
     });
   }
 }
+
+@Injectable()
+export class PredictResolver implements Resolve<any> {
+  constructor(private portfolioService: PortfolioService) {
+  }
+
+  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<void> {
+    return new Observable(observer => {
+      this.portfolioService.readFullPredicts().subscribe((data) => {
+        this.portfolioService.predicts = data;
+        observer.next();
+        observer.complete();
+      });
+    });
+  }
+}
