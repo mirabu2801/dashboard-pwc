@@ -90,7 +90,7 @@
             <div class="left"></div>
             <div class="right">
 
-<!--              <button (click)="makingRecommendations()" mat-raised-button color="accent">создать рек</button>-->
+              <button (click)="makingRecommendations()" mat-raised-button color="accent">создать рек</button>
 
               <button (click)="applySelectedRecommendations()" *ngIf="shoes.selectedOptions.selected.length != 0" mat-raised-button color="accent">Применить</button>
               <button *ngIf="shoes.selectedOptions.selected.length == 0" mat-raised-button color="accent" disabled>Применить</button>
@@ -159,6 +159,10 @@
             Мой портфель
           </div>
 
+          <div class="free-money-block">
+            Свободные деньги: {{portfolioService.getFreeMoney()}}$
+          </div>
+
           <div class="example-container mat-elevation-z0">
             <table mat-table [dataSource]="portfolio">
               <!-- Position Column -->
@@ -193,7 +197,7 @@
             График
           </div>
 
-          <div echarts [options]="chartOption" class="demo-chart"></div>
+<!--          <div echarts [options]="chartOption" class="demo-chart"></div>-->
         </div>
 
       </div>

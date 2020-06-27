@@ -12,9 +12,13 @@ export class RightMenuComponent implements OnInit {
 
   balance = 0;
 
-  ngOnInit(): void {
+  updateInfo() {
     this.portfolioService.readFreeMoney();
     this.balance = this.portfolioService.getFreeMoney();
+  }
+
+  ngOnInit(): void {
+    this.updateInfo();
   }
 
   addBalance(delta: number) {

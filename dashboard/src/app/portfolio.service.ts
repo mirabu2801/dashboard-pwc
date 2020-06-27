@@ -6,7 +6,7 @@ import {AppModule} from './app.module';
 export interface Position {
   ticker: string;
   cnt: number;
-  closeDate?: string;
+  closeDate: string;
 }
 
 export interface Recommendation {
@@ -35,7 +35,14 @@ export class PortfolioService {
   }
 
   getRecommendationsForDate(date: string): Recommendation[]{
-    return [];
+    return [
+      {
+        type: 1,
+        ticker: 'APA',
+        cnt: 1,
+        closeDate: '2020-03-19'
+      }
+    ];
   }
 
   dateToString(date: Date): string{
@@ -96,7 +103,7 @@ export class PortfolioService {
   }
 
   getFreeMoney(): number{
-    console.log(this.freeMoney);
+    this.readFreeMoney();
     return this.freeMoney;
   }
 
@@ -104,11 +111,13 @@ export class PortfolioService {
     localStorage.setItem('portfolio', JSON.stringify(this.portfolio));
   }
 
-  getBalance(): number {
+  getBalance(date: Date): number {
+    this.init();
+    const dateStr = this.dateToString(date);
     let ans = this.freeMoney;
 
     for (const e of this.portfolio) {
-      ans += e.cnt;
+      ans += e.cnt * this.getCostStock(e.ticker, date);
     }
     return ans;
   }
@@ -118,22 +127,38 @@ export class PortfolioService {
     return this.portfolio;
   }
 
-  changePortfolio(ticker: string, cnt: number) {
-    // tslint:disable-next-line:prefer-for-of
-    for (let i = 0; i < this.portfolio.length; i++) {
-      if (this.portfolio[i].ticker === ticker) {
-        this.portfolio[i].cnt += cnt;
-        if (this.portfolio[i].cnt === 0) {
-          this.portfolio.splice(i, 1);
-        }
-        this.setPortfolio();
-        return;
-      }
+  applyRecommendationToPortfolio(rec: Recommendation, date: Date) {
+    console.log(rec);
+    if (rec.type === 1) {
+      const tmp: Position = {
+        closeDate: rec.closeDate,
+        ticker: rec.ticker,
+        cnt: rec.cnt
+      };
+      const cost = rec.cnt * this.getCostStock(rec.ticker, date);
+      this.addFreeMoney(-1 * cost);
+
+      console.log('tmp = ', tmp);
+      this.portfolio.push(tmp);
+      console.log(this.portfolio);
+      this.setPortfolio();
+      console.log('\n');
     }
 
-    const tempDate = '2020-03-19';
-    this.portfolio.push({ticker, cnt, closeDate: tempDate});
-    this.setPortfolio();
-    return;
+    if (rec.type === 2) {
+      // tslint:disable-next-line:prefer-for-of
+      for (let i = 0; i < this.portfolio.length; i++) {
+        const elem = this.portfolio[i];
+        if (elem.ticker === rec.ticker &&
+          elem.ticker === rec.ticker) {
+
+          this.addFreeMoney(elem.cnt * this.getCostStock(elem.ticker, date));
+          this.portfolio.splice(i, 1);
+
+          this.setPortfolio();
+          return;
+        }
+      }
+    }
   }
 }

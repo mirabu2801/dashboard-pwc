@@ -96,8 +96,7 @@ export class MainLayoutComponent implements OnInit {
     console.log(todayStr);
 
     for (const elem of myPortfolio) {
-      //if (elem.closeDate === todayStr) {
-      if (1) {
+      if (elem.closeDate === todayStr) {
         this.rec.push({
           type: 2,
           ticker: elem.ticker,
@@ -111,14 +110,31 @@ export class MainLayoutComponent implements OnInit {
     for (const elem of recDate) {
       const type = elem.type === 1 ? 1 : 3;
 
-      let cnt = this.portfolioService.getBalance();
+      let cnt = this.portfolioService.getBalance(this.date.value);
+      console.log("Баланс :", cnt);
       cnt = cnt * elem.cnt / this.portfolioService.getCostStock(elem.ticker, this.date.value);
+
+      let ok = 1;
+
+      for (const myPos of this.portfolio) {
+        console.log(elem, myPos);
+        if (myPos.ticker === elem.ticker &&
+        myPos.closeDate === elem.closeDate) {
+          ok = 0;
+          break;
+        }
+      }
+
+      if (!ok) {
+        continue;
+      }
 
       this.rec.push({
         type,
         ticker: elem.ticker,
         cnt,
-        confidence: elem.confidence
+        confidence: elem.confidence,
+        closeDate: elem.closeDate
       });
     }
     return;
@@ -127,7 +143,13 @@ export class MainLayoutComponent implements OnInit {
   @ViewChild('shoes') checkRecommendList;
 
   applySelectedRecommendations() {
-    console.log(this.checkRecommendList);
+    console.log(this.checkRecommendList._value);
+    for (const idx of this.checkRecommendList._value) {
+      console.log(idx);
+      this.portfolioService.applyRecommendationToPortfolio(this.rec[idx], this.date.value);
+    }
+    this.portfolio = this.portfolioService.getPortfolio();
+    this.makingRecommendations();
   }
 
   onChanged(increased: any){
